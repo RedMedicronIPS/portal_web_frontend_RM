@@ -23,7 +23,7 @@ export default function Bienvenida() {
           </p>
         )}
         <p className="text-blue-100 text-base italic mb-2">
-          “Innovacion y tecnologia.”
+          “Juntos cuidamos vidas con calidad y humanidad.”
         </p>
         
       </div>

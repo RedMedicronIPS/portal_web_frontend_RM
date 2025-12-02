@@ -6,23 +6,58 @@ const organigramaData = [
   {
     id: 'general',
     name: 'Estructura General',
-    description: 'Organigrama institucional completo de la institución',
+    description: 'Organigrama institucional completo Red Medicron IPS',
     image: '/institucion/Organigrama.png',
     area: 'Institucional'
   },
   {
-    id: 'sistemas',
-    name: 'Estructura de Sistemas',
-    description: 'Organigrama de la Coordinación de Sistemas',
-    image: '/institucion/coordinacionsistemas.png',
-    area: 'Sistemas'
+    id: 'direccion-ejecutiva',
+    name: 'Dirección Ejecutiva',
+    description: 'Estructura organizacional de la Dirección Ejecutiva',
+    image: '/institucion/DireccionEjectiva.jpeg',
+    area: 'Dirección'
   },
   {
-    id: 'administrativa',
-    name: 'Estructura Administrativa',
-    description: 'Organigrama de la Coordinación Administrativa',
-    image: '/institucion/administrativa.png',
-    area: 'Administrativa'
+    id: 'coordinacion-calidad',
+    name: 'Coordinación de Calidad',
+    description: 'Estructura de Coordinación de Calidad y Servicios de Apoyo',
+    image: '/institucion/CoordinacionCalidadServiciosApoto.jpeg',
+    area: 'Calidad'
+  },
+  {
+    id: 'coordinacion-asistencial',
+    name: 'Coordinación Asistencial',
+    description: 'Estructura de Coordinación de Servicios Asistenciales',
+    image: '/institucion/CoordinacionServiciosAsistenciales.jpeg',
+    area: 'Asistencial'
+  },
+  {
+    id: 'jefatura-financiera',
+    name: 'Jefatura Financiera',
+    description: 'Estructura de Jefatura Financiera y Administrativa',
+    image: '/institucion/JefaturaFinancieraAdministrativa.png',
+    area: 'Financiera'
+  },
+  {
+    id: 'jefatura-calidad',
+    name: 'Jefatura de Calidad',
+    description: 'Estructura de Jefatura de Gestión de Calidad',
+    image: '/institucion/JefaturaGestionCalidad.png',
+    area: 'Calidad'
+  },
+  {
+    id: 'jefatura-talento',
+    name: 'Jefatura Talento Humano',
+    description: 'Estructura de Jefatura de Gestión del Talento Humano',
+    image: '/institucion/jefaturaGestionTalentoHumano.png',
+    area: 'Talento Humano'
+  },
+  {
+    id: 'jefatura-servicios',
+    name: 'Jefatura Servicios de Salud',
+    description: 'Estructura de Jefatura de Servicios de Salud',
+    image: '/institucion/JefaturaServiciosSalud.png',
+    area: 'Servicios de Salud'
   }
 ];
 

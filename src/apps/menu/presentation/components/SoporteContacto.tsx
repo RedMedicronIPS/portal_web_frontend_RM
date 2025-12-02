@@ -4,9 +4,9 @@ import { HiEnvelope, HiChatBubbleLeftRight, HiSparkles, HiClock, HiCheckCircle, 
 const SOPORTE = [
   {
     canal: "Correo electrónico",
-    valor: "edisonnarvaez.esn@gmail.com",
+    valor: "tic@redmedicronips.com.co",
     icono: <HiEnvelope className="w-8 h-8 text-white" />,
-    link: "mailto:edisonnarvaez.esn@gmail.com",
+    link: "mailto:tic@redmedicronips.com.co",
     color: "from-blue-400 to-blue-500",
     bgColor: "from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/25",
     textColor: "text-blue-600 dark:text-blue-300",
@@ -35,7 +35,7 @@ export default function SoporteContacto() {
 
   const copyEmail = async () => {
     try {
-      await navigator.clipboard.writeText("edisonnarvaez.esn@gmail.com");
+      await navigator.clipboard.writeText("tic@redmedicronips.com.co");
       setCopiedEmail(true);
       setTimeout(() => setCopiedEmail(false), 2000);
     } catch (err) {
