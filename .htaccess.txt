@@ -13,7 +13,7 @@ Header always set Referrer-Policy "strict-origin-when-cross-origin"
 # =======================================
 # Content Security Policy (CSP)
 # =======================================
-Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.facebook.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: http: https:; connect-src 'self' http: https: wss: blob: http://186.115.218.10:8081 http://152.200.161.234:8081 https://script.google.com https://script.googleusercontent.com; frame-src 'self' blob: https://www.facebook.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'self' blob:; media-src 'self' blob: http: https:;"
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.facebook.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: http: https:; connect-src 'self' http: https: wss: blob: http://186.115.218.10:8081 http://152.200.161.234:8081 http://201.182.248.51:8081 http://api.redmedicronips.com.co https://api.redmedicronips.com.co https://script.google.com https://script.googleusercontent.com; frame-src 'self' blob: https://www.facebook.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'self' blob:; media-src 'self' blob: http: https:;"
 
 # =======================================
 # Forzar sin www (mantener en http por ahora)
@@ -26,7 +26,7 @@ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 # CORS (permitir frontend sin www y con http/https)
 # =======================================
 <IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origin "http://red.redmedicronips.com.co https://red.redmedicronips.com.co"
+    Header set Access-Control-Allow-Origin "http://pilot.redmedicronips.com.co https://pilot.redmedicronips.com.co"
     Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     Header set Access-Control-Allow-Credentials "true"
@@ -35,7 +35,7 @@ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 # Manejo de preflight OPTIONS
 <IfModule mod_headers.c>
   <If "%{REQUEST_METHOD} == 'OPTIONS'">
-    Header always set Access-Control-Allow-Origin "http://red.redmedicronips.com.co https://red.redmedicronips.com.co"
+    Header always set Access-Control-Allow-Origin "http://pilot.redmedicronips.com.co https://pilot.redmedicronips.com.co"
     Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
     Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
     Header always set Access-Control-Allow-Credentials "true"
