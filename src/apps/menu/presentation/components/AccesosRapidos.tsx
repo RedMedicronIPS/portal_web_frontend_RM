@@ -16,7 +16,7 @@ const ACCESOS = [
 	},
 	{
 		nombre: "Salud IPS (Historia Clínica)",
-		url: "http://186.115.218.10/SaludIPS/",
+		url: "http://201.182.248.50/SaludIPS/",
 		icono: <HiDocumentText className="w-10 h-10 text-green-600 group-hover:scale-110 transition-transform" />,
 		color: "bg-gradient-to-br from-green-100/80 to-green-200/60 dark:from-green-900/60 dark:to-green-800/40",
 	},

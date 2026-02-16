@@ -64,7 +64,7 @@ export default function ForgotPassword() {
                 © {currentYear} PILOT. <br />
                 Todos los derechos reservados.
               </div>
-          </div>
+          </div>
         </div>
       </div>
 

@@ -41,11 +41,11 @@ export default function LoginPage() {
             <div className="flex items-center gap-3 mb-8 lg:mb-16">
               <img 
                 src="/logo.png" 
-                alt="Red Medicron IPS Logo" 
+                alt="PILOT" 
                 className="h-12 sm:h-14 w-auto"
               />
               <h1 className="text-xl sm:text-2xl font-medium text-white">
-                Portal de Gestión Institucional PILOT
+                Portal de Gestión Institucional
               </h1>
             </div>
             
@@ -94,7 +94,7 @@ export default function LoginPage() {
                 © {currentYear} PILOT. <br />
                 Todos los derechos reservados.
               </div>
-          </div>
+          </div>
         </div>
       </div>
 
@@ -210,7 +210,7 @@ export default function LoginPage() {
                   Horario de soporte: Lun-Vie 7:00 AM - 3:30 PM
                 </p>
                 <p className="text-[11px] sm:text-xs text-gray-500">
-                  Contacto: tic@redmedicronips.com.co <br className="sm:hidden"/>
+                  Contacto: edisonnarvaez.esn@gmail.com <br className="sm:hidden"/>
                 </p>
               </div>
             </div>
