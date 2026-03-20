@@ -74,7 +74,7 @@ export default function ActionButtons({
                 }}
                 className="w-full text-left px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-600 flex items-center gap-2 border-b border-gray-200 dark:border-gray-600"
               >
-                <FaEye size={14} />
+                <FaFileAlt size={14} />
                 <span>Ver detalles</span>
               </button>
             )}
@@ -89,7 +89,7 @@ export default function ActionButtons({
                 className="w-full text-left px-4 py-2 text-sm text-green-600 dark:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-600 flex items-center gap-2 border-b border-gray-200 dark:border-gray-600 disabled:opacity-50"
                 disabled={loadingExcel}
               >
-                <FaFileAlt size={14} />
+                <FaEye size={14} />
                 <span>Ver oficial</span>
               </button>
             )}
@@ -121,7 +121,7 @@ export default function ActionButtons({
                     className="w-full text-left px-4 py-2 text-sm text-purple-600 dark:text-purple-400 hover:bg-gray-50 dark:hover:bg-gray-600 flex items-center gap-2 border-b border-gray-200 dark:border-gray-600 disabled:opacity-50"
                     disabled={loadingExcel}
                   >
-                    <FaFileAlt size={14} />
+                    <FaEye size={14} />
                     <span>Ver editable</span>
                   </button>
                 )}
