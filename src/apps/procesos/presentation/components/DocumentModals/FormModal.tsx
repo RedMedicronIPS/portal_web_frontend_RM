@@ -292,7 +292,7 @@ export default function FormModal({
                   value={form.descripcion_documento || ""}
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
-                  rows={4}
+                  rows={2}
                 />
               </div>
 
