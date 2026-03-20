@@ -28,6 +28,7 @@ export default function FormModal({
   const [form, setForm] = useState<Partial<Document>>({
     codigo_documento: document?.codigo_documento || "",
     nombre_documento: document?.nombre_documento || "",
+    descripcion_documento: document?.descripcion_documento || "",
     proceso: document?.proceso || 0,
     tipo_documento: document?.tipo_documento || "",
     version: document?.version ?? 0,
@@ -282,6 +283,18 @@ export default function FormModal({
                 required
               />
             </div>
+              <div className="sm:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  Descripción del Documento
+                </label>
+                <textarea
+                  name="descripcion_documento"
+                  value={form.descripcion_documento || ""}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  rows={4}
+                />
+              </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">

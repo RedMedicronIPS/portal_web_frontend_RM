@@ -3,6 +3,7 @@ export interface Document {
   documento_padre: number | null;
   codigo_documento: string;
   nombre_documento: string;
+  descripcion_documento: string;
   proceso: number;
   tipo_documento: string;
   version: number;

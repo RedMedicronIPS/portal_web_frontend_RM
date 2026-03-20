@@ -52,6 +52,7 @@ export default function ViewModal({
           <div className="grid grid-cols-2 gap-y-3 gap-x-4">
             <Label title="Código:" value={document.codigo_documento} mono />
             <Label title="Nombre:" value={document.nombre_documento} />
+            <Label title="Descripción:" value={document.descripcion_documento} />
 
             <Label title="Proceso:" value={documentService.getProcessName(processes, document.proceso)} />
             <Label title="Tipo:" value={getTipoLabel(document.tipo_documento)} />

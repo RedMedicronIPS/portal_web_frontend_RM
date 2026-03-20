@@ -32,7 +32,8 @@ export const useDocumentFilters = (
       // Filtro básico por búsqueda, tipo y proceso
       const matchesBasicFilters = (
         doc.nombre_documento.toLowerCase().includes(filters.searchTerm.toLowerCase()) || 
-        doc.codigo_documento.toLowerCase().includes(filters.searchTerm.toLowerCase())
+        doc.codigo_documento.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        doc.descripcion_documento?.toLowerCase().includes(filters.searchTerm.toLowerCase())
       ) &&
         (filters.selectedTipo === "" || doc.tipo_documento === filters.selectedTipo) &&
         (filters.selectedProceso === "" || doc.proceso.toString() === filters.selectedProceso);
