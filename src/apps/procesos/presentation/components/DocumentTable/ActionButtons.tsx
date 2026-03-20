@@ -180,7 +180,7 @@ export default function ActionButtons({
           className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
           title="Ver detalles"
         >
-          <FaEye size={16} />
+          <FaFileAlt size={16} />
         </button>
       )}
 
@@ -195,7 +195,7 @@ export default function ActionButtons({
           {loadingExcel ? (
             <div className="animate-spin w-4 h-4 border-2 border-green-600 border-t-transparent rounded-full"></div>
           ) : (
-            <FaFileAlt size={16} />
+            <FaEye size={16} />
           )}
         </button>
       )}
@@ -225,7 +225,7 @@ export default function ActionButtons({
               {loadingExcel ? (
                 <div className="animate-spin w-4 h-4 border-2 border-purple-600 border-t-transparent rounded-full"></div>
               ) : (
-                <FaEdit size={16} />
+                <FaEye size={16} />
               )}
             </button>
           )}
