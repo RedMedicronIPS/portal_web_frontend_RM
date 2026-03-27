@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import type { Document } from '../../../domain/entities/Document';
 import type { Headquarter } from '../../../domain/entities/Headquarter';
@@ -55,6 +55,15 @@ export default function FormModal({
 
   const [formError, setFormError] = useState("");
   const [documentosDuplicados, setDocumentosDuplicados] = useState<Document[]>([]);
+  const [padreSearchTerm, setPadreSearchTerm] = useState(() => {
+    if (!document?.documento_padre) return '';
+
+    const existingParent = documents.find(doc => doc.id === document.documento_padre);
+    return existingParent
+      ? `${existingParent.codigo_documento} v${existingParent.version} - ${existingParent.nombre_documento}`
+      : '';
+  });
+  const [showPadreResults, setShowPadreResults] = useState(false);
 
   // 🔎 Verificar duplicados
   const verificarDuplicados = (codigo: string, nombre: string) => {
@@ -219,6 +228,56 @@ export default function FormModal({
     }
     return documentService.getDocumentosDisponiblesComoPadre(documents);
   };
+
+  const formatDocumentoPadreLabel = (doc: Document) => {
+    return `${doc.codigo_documento} v${doc.version} - ${doc.nombre_documento}`;
+  };
+
+  const documentosPadreDisponibles = useMemo(() => {
+    return getDocumentosDisponiblesComoPadre().slice().sort((a, b) => {
+      const byCode = a.codigo_documento.localeCompare(b.codigo_documento, 'es', {
+        numeric: true,
+        sensitivity: 'base'
+      });
+
+      if (byCode !== 0) return byCode;
+      return b.version - a.version;
+    });
+  }, [documents, isEdit, document, documentService]);
+
+  const filteredDocumentosPadre = useMemo(() => {
+    const term = padreSearchTerm.trim().toLowerCase();
+    const source = term
+      ? documentosPadreDisponibles.filter(doc =>
+          doc.codigo_documento.toLowerCase().includes(term) ||
+          doc.nombre_documento.toLowerCase().includes(term)
+        )
+      : documentosPadreDisponibles;
+
+    return source.slice(0, 5);
+  }, [documentosPadreDisponibles, padreSearchTerm]);
+
+  const handleSelectDocumentoPadre = (selectedDoc: Document | null) => {
+    if (!selectedDoc) {
+      setForm(prev => ({ ...prev, documento_padre: null }));
+      setPadreSearchTerm('');
+      setShowPadreResults(false);
+      return;
+    }
+
+    setForm(prev => ({ ...prev, documento_padre: selectedDoc.id }));
+    setPadreSearchTerm(formatDocumentoPadreLabel(selectedDoc));
+    setShowPadreResults(false);
+  };
+
+  useEffect(() => {
+    if (!document?.documento_padre) return;
+
+    const existingParent = documents.find(doc => doc.id === document.documento_padre);
+    if (existingParent) {
+      setPadreSearchTerm(formatDocumentoPadreLabel(existingParent));
+    }
+  }, [document, documents]);
 
   return (
     <div className="fixed z-50 inset-0 overflow-y-auto bg-black bg-opacity-60 flex items-center justify-center p-2 sm:p-4">
@@ -435,19 +494,64 @@ export default function FormModal({
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                 Version Controlado (Opcional)
               </label>
-              <select
-                name="documento_padre"
-                value={form.documento_padre || ""}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
-              >
-                <option value="">Sin documento controlado</option>
-                {getDocumentosDisponiblesComoPadre().map(documento => (
-                  <option key={documento.id} value={documento.id}>
-                    {documento.codigo_documento} v{documento.version} - {documento.nombre_documento}
-                  </option>
-                ))}
-              </select>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={padreSearchTerm}
+                    onFocus={() => setShowPadreResults(true)}
+                    onChange={(e) => {
+                      setPadreSearchTerm(e.target.value);
+                      setForm(prev => ({ ...prev, documento_padre: null }));
+                      setShowPadreResults(true);
+                    }}
+                    placeholder="Buscar por codigo o nombre..."
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  />
+                  {form.documento_padre && (
+                    <button
+                      type="button"
+                      onClick={() => handleSelectDocumentoPadre(null)}
+                      className="px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      Limpiar
+                    </button>
+                  )}
+                </div>
+
+                {showPadreResults && (
+                  <div className="max-h-44 overflow-y-auto border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800">
+                    <button
+                      type="button"
+                      onClick={() => handleSelectDocumentoPadre(null)}
+                      className="w-full text-left px-3 py-2 text-sm text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      Sin documento controlado
+                    </button>
+
+                    {filteredDocumentosPadre.length === 0 ? (
+                      <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                        No se encontraron documentos
+                      </div>
+                    ) : (
+                      filteredDocumentosPadre.map(documento => (
+                        <button
+                          key={documento.id}
+                          type="button"
+                          onClick={() => handleSelectDocumentoPadre(documento)}
+                          className="w-full text-left px-3 py-2 text-sm text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-t border-gray-100 dark:border-gray-700"
+                        >
+                          {formatDocumentoPadreLabel(documento)}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Mostrando hasta 5 resultados. Escribe para filtrar por codigo o nombre.
+                </p>
+              </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Seleccione un documento version controlada si esta es una nueva versión
               </p>
