@@ -372,7 +372,7 @@ export default function FormModal({
                 </option>
                 {serviciosFiltrados.map(servicio => (
                   <option key={servicio.id} value={servicio.id}>
-                    {servicio.nombre_servicio}
+                    {`${servicio.codigo_servicio} - ${servicio.nombre_servicio}`}
                   </option>
                 ))}
               </select>

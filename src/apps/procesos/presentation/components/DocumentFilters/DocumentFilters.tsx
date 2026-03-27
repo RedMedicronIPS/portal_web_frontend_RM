@@ -105,7 +105,9 @@ export default function DocumentFilters({
               : 'Todos los servicios'}
           </option>
           {filteredServicios.map(servicio => (
-            <option key={servicio.id} value={servicio.id}>{servicio.nombre_servicio}</option>
+            <option key={servicio.id} value={servicio.id}>
+              {`${servicio.codigo_servicio} - ${servicio.nombre_servicio}`}
+            </option>
           ))}
         </select>
         <select
