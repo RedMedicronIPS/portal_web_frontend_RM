@@ -29,9 +29,23 @@ export default function DocumentFilters({
   onUpdateFilter,
   onClearFilters
 }: DocumentFiltersProps) {
-  const filteredServicios = filters.selectedHeadquarter
+  const compareServicios = (a: Servicio, b: Servicio) => {
+    const byCodigo = a.codigo_servicio.localeCompare(b.codigo_servicio, 'es', {
+      numeric: true,
+      sensitivity: 'base'
+    });
+
+    if (byCodigo !== 0) return byCodigo;
+
+    return a.nombre_servicio.localeCompare(b.nombre_servicio, 'es', {
+      sensitivity: 'base'
+    });
+  };
+
+  const filteredServicios = (filters.selectedHeadquarter
     ? servicios.filter(servicio => servicio.headquarter.toString() === filters.selectedHeadquarter)
-    : servicios;
+    : servicios
+  ).slice().sort(compareServicios);
 
   // Filtrar procesos según el tipo de proceso seleccionado
   const filteredProcesses = filters.selectedTipoProceso 

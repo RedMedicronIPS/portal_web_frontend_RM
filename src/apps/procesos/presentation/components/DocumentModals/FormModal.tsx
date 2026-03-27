@@ -102,9 +102,23 @@ export default function FormModal({
   }
 };
 
-  const serviciosFiltrados = form.headquarter
+  const compareServicios = (a: Servicio, b: Servicio) => {
+    const byCodigo = a.codigo_servicio.localeCompare(b.codigo_servicio, 'es', {
+      numeric: true,
+      sensitivity: 'base'
+    });
+
+    if (byCodigo !== 0) return byCodigo;
+
+    return a.nombre_servicio.localeCompare(b.nombre_servicio, 'es', {
+      sensitivity: 'base'
+    });
+  };
+
+  const serviciosFiltrados = (form.headquarter
     ? servicios.filter(servicio => servicio.headquarter === form.headquarter)
-    : servicios;
+    : servicios
+  ).slice().sort(compareServicios);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files: selectedFiles } = e.target;
