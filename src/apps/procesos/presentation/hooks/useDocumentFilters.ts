@@ -10,6 +10,8 @@ export interface DocumentFilters {
   selectedEstado: string;
   selectedProceso: string;
   selectedTipoProceso: string;
+  selectedHeadquarter: string;
+  selectedServicio: string;
 }
 
 
@@ -24,7 +26,9 @@ export const useDocumentFilters = (
     selectedTipo: '',
     selectedEstado: '',
     selectedProceso: '',
-    selectedTipoProceso: ''
+    selectedTipoProceso: '',
+    selectedHeadquarter: '',
+    selectedServicio: ''
   });
 
   const filteredDocuments = useMemo(() => {
@@ -33,10 +37,14 @@ export const useDocumentFilters = (
       const matchesBasicFilters = (
         doc.nombre_documento.toLowerCase().includes(filters.searchTerm.toLowerCase()) || 
         doc.codigo_documento.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        doc.descripcion_documento?.toLowerCase().includes(filters.searchTerm.toLowerCase())
+        doc.descripcion_documento?.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        doc.headquarter_nombre?.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        doc.servicio_nombre?.toLowerCase().includes(filters.searchTerm.toLowerCase())
       ) &&
         (filters.selectedTipo === "" || doc.tipo_documento === filters.selectedTipo) &&
-        (filters.selectedProceso === "" || doc.proceso.toString() === filters.selectedProceso);
+        (filters.selectedProceso === "" || doc.proceso.toString() === filters.selectedProceso) &&
+        (filters.selectedHeadquarter === "" || doc.headquarter?.toString() === filters.selectedHeadquarter) &&
+        (filters.selectedServicio === "" || doc.servicio?.toString() === filters.selectedServicio);
 
       // Filtro por tipo de proceso
       let matchesProcessType = true;
@@ -74,7 +82,9 @@ export const useDocumentFilters = (
       selectedTipo: '',
       selectedEstado: '',
       selectedProceso: '',
-      selectedTipoProceso: ''
+      selectedTipoProceso: '',
+      selectedHeadquarter: '',
+      selectedServicio: ''
     });
   };
 

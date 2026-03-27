@@ -1,13 +1,17 @@
 
 import { FaSearch, FaTimes } from 'react-icons/fa';
+import type { Headquarter } from '../../../domain/entities/Headquarter';
 import type { Process } from '../../../domain/entities/Process';
 import type { ProcessType } from '../../../domain/entities/ProcessType';
+import type { Servicio } from '../../../domain/entities/Servicio';
 import type { DocumentPermissions } from '../../../application/services/PermissionService';
 import type { DocumentFilters as IDocumentFilters } from '../../hooks/useDocumentFilters';
 import { TIPOS_DOCUMENTO, ESTADOS } from '../../../domain/types';
 
 interface DocumentFiltersProps {
   filters: IDocumentFilters;
+  headquarters: Headquarter[];
+  servicios: Servicio[];
   processes: Process[];
   processTypes: ProcessType[];
   permissions: DocumentPermissions;
@@ -17,12 +21,18 @@ interface DocumentFiltersProps {
 
 export default function DocumentFilters({
   filters,
+  headquarters,
+  servicios,
   processes,
   processTypes,
   permissions,
   onUpdateFilter,
   onClearFilters
 }: DocumentFiltersProps) {
+  const filteredServicios = filters.selectedHeadquarter
+    ? servicios.filter(servicio => servicio.headquarter.toString() === filters.selectedHeadquarter)
+    : servicios;
+
   // Filtrar procesos según el tipo de proceso seleccionado
   const filteredProcesses = filters.selectedTipoProceso 
     ? processes.filter(proceso => proceso.processType?.toString() === filters.selectedTipoProceso)
@@ -38,9 +48,16 @@ export default function DocumentFilters({
     }
   };
 
+  const handleHeadquarterChange = (value: string) => {
+    onUpdateFilter('selectedHeadquarter', value);
+    if (value !== filters.selectedHeadquarter) {
+      onUpdateFilter('selectedServicio', '');
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2 mb-1">
-      <div className={`grid gap-2 grid-cols-1 sm:grid-cols-2 ${permissions.isAdmin ? 'lg:grid-cols-6' : 'lg:grid-cols-5'}`}>
+      <div className={`grid gap-2 grid-cols-1 sm:grid-cols-2 ${permissions.isAdmin ? 'lg:grid-cols-8' : 'lg:grid-cols-7'}`}>
         <select
           value={filters.selectedTipoProceso}
           onChange={(e) => handleTipoProcesoChange(e.target.value)}
@@ -64,6 +81,31 @@ export default function DocumentFilters({
           </option>
           {filteredProcesses.map(proceso => (
             <option key={proceso.id} value={proceso.id}>{proceso.name}</option>
+          ))}
+        </select>
+        <select
+          value={filters.selectedHeadquarter}
+          onChange={(e) => handleHeadquarterChange(e.target.value)}
+          className="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+        >
+          <option value="">Todas las sedes</option>
+          {headquarters.map(headquarter => (
+            <option key={headquarter.id} value={headquarter.id}>{headquarter.name}</option>
+          ))}
+        </select>
+        <select
+          value={filters.selectedServicio}
+          onChange={(e) => onUpdateFilter('selectedServicio', e.target.value)}
+          className="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+          disabled={filters.selectedHeadquarter !== '' && filteredServicios.length === 0}
+        >
+          <option value="">
+            {filters.selectedHeadquarter !== '' && filteredServicios.length === 0
+              ? 'No hay servicios para esta sede'
+              : 'Todos los servicios'}
+          </option>
+          {filteredServicios.map(servicio => (
+            <option key={servicio.id} value={servicio.id}>{servicio.nombre_servicio}</option>
           ))}
         </select>
         <select

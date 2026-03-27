@@ -110,6 +110,8 @@ export default function ProcesosPage() {
     documents,
     processes,
     processTypes,
+    headquarters,
+    servicios,
     loading,
     error: crudError, // Renombrar para evitar conflicto
     createDocument,
@@ -117,7 +119,9 @@ export default function ProcesosPage() {
     deleteDocument,
     documentService,
     fetchDocuments,
-    fetchProcesses
+    fetchProcesses,
+    fetchHeadquarters,
+    fetchServicios
   } = useDocumentCRUD();
 
   const { filters, filteredDocuments, updateFilter, clearFilters } = useDocumentFilters(documents, processes, processTypes, permissions);
@@ -212,7 +216,7 @@ export default function ProcesosPage() {
     setIsRefreshing(true);
     setError(''); // Limpiar errores previos
     try {
-      await Promise.all([fetchDocuments(), fetchProcesses()]);
+      await Promise.all([fetchDocuments(), fetchProcesses(), fetchHeadquarters(), fetchServicios()]);
       setMessage('Datos actualizados correctamente');
     } catch (error) {
       const errorMsg = getSpecificErrorMessage(error, 'actualizar los datos');
@@ -541,6 +545,8 @@ export default function ProcesosPage() {
         <div className="flex-shrink-0 overflow-x-auto">
           <DocumentFilters
             filters={filters}
+            headquarters={headquarters}
+            servicios={servicios}
             processes={processes}
             processTypes={processTypes}
             permissions={permissions}
@@ -579,6 +585,8 @@ export default function ProcesosPage() {
         <FormModal
           documents={documents}
           processes={processes}
+          headquarters={headquarters}
+          servicios={servicios}
           documentService={documentService}
           onSubmit={handleFormSubmit}
           onCancel={() => closeModal('isFormOpen')}
@@ -591,6 +599,8 @@ export default function ProcesosPage() {
           document={modalData.editingDocument}
           documents={documents}
           processes={processes}
+          headquarters={headquarters}
+          servicios={servicios}
           documentService={documentService}
           onSubmit={handleFormSubmit}
           onCancel={() => closeModal('isEditFormOpen')}
@@ -601,6 +611,8 @@ export default function ProcesosPage() {
         <ViewModal
           document={modalData.viewingDocument}
           processes={processes}
+          headquarters={headquarters}
+          servicios={servicios}
           permissions={permissions}
           documentService={documentService}
           onClose={() => closeModal('isViewOpen')}

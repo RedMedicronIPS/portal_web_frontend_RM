@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import type { Document } from '../../../domain/entities/Document';
+import type { Headquarter } from '../../../domain/entities/Headquarter';
 import type { Process } from '../../../domain/entities/Process';
+import type { Servicio } from '../../../domain/entities/Servicio';
 import type { DocumentService } from '../../../application/services/DocumentService';
 import { TIPOS_DOCUMENTO, ESTADOS } from '../../../domain/types';
 
@@ -10,6 +12,8 @@ interface FormModalProps {
   document?: Document;
   documents: Document[];
   processes: Process[];
+  headquarters: Headquarter[];
+  servicios: Servicio[];
   documentService: DocumentService;
   onSubmit: (data: FormData) => Promise<void>;
   onCancel: () => void;
@@ -20,6 +24,8 @@ export default function FormModal({
   document,
   documents, 
   processes,
+  headquarters,
+  servicios,
   documentService,
   onSubmit,
   onCancel
@@ -30,6 +36,8 @@ export default function FormModal({
     nombre_documento: document?.nombre_documento || "",
     descripcion_documento: document?.descripcion_documento || "",
     proceso: document?.proceso || 0,
+    headquarter: document?.headquarter || null,
+    servicio: document?.servicio || null,
     tipo_documento: document?.tipo_documento || "",
     version: document?.version ?? 0,
     estado: document?.estado || "VIG",
@@ -71,12 +79,18 @@ export default function FormModal({
     processedValue = (e.target as HTMLInputElement).checked;
   } else if (name === "version" || name === "proceso") {
     processedValue = value === "" ? 0 : Number(value);
+  } else if (name === "headquarter" || name === "servicio" || name === "documento_padre") {
+    processedValue = value === "" ? null : Number(value);
   }
 
   const updatedForm = {
     ...form,
     [name]: processedValue,
   };
+
+  if (name === 'headquarter') {
+    updatedForm.servicio = null;
+  }
 
   setForm(updatedForm);
 
@@ -87,6 +101,10 @@ export default function FormModal({
     );
   }
 };
+
+  const serviciosFiltrados = form.headquarter
+    ? servicios.filter(servicio => servicio.headquarter === form.headquarter)
+    : servicios;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files: selectedFiles } = e.target;
@@ -189,10 +207,10 @@ export default function FormModal({
   };
 
   return (
-    <div className="fixed z-50 inset-0 overflow-y-auto bg-black bg-opacity-60 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-xl w-full max-w-2xl mx-auto my-4">
+    <div className="fixed z-50 inset-0 overflow-y-auto bg-black bg-opacity-60 flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl w-full max-w-2xl mx-auto my-2 sm:my-4 max-h-[95vh] sm:max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
             {isEdit ? "Editar" : "Subir"} Documento
           </h2>
@@ -204,7 +222,8 @@ export default function FormModal({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="flex flex-col min-h-0 flex-1">
+          <div className="overflow-y-auto p-4 sm:p-6 space-y-6 flex-1 min-h-0">
           {formError && (
             <div className="p-4 bg-red-50 border-l-4 border-red-500 rounded-md dark:bg-red-900/20 dark:border-red-400">
               <div className="flex items-start gap-3">
@@ -318,6 +337,49 @@ export default function FormModal({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                Sede (Opcional)
+              </label>
+              <select
+                name="headquarter"
+                value={form.headquarter || ""}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+              >
+                <option value="">Sin sede</option>
+                {headquarters.map(headquarter => (
+                  <option key={headquarter.id} value={headquarter.id}>
+                    {headquarter.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                Servicio (Opcional)
+              </label>
+              <select
+                name="servicio"
+                value={form.servicio || ""}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                disabled={Boolean(form.headquarter) && serviciosFiltrados.length === 0}
+              >
+                <option value="">
+                  {Boolean(form.headquarter) && serviciosFiltrados.length === 0
+                    ? 'No hay servicios para esta sede'
+                    : 'Sin servicio'}
+                </option>
+                {serviciosFiltrados.map(servicio => (
+                  <option key={servicio.id} value={servicio.id}>
+                    {servicio.nombre_servicio}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                 Tipo de Documento
               </label>
               <select
@@ -410,9 +472,10 @@ export default function FormModal({
               </p>
             </div>
           </div>
+          </div>
 
           {/* Footer */}
-          <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex justify-end space-x-4 p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 flex-shrink-0 bg-white dark:bg-gray-900">
             <button
               type="button"
               onClick={onCancel}

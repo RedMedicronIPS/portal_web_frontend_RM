@@ -1,23 +1,31 @@
 import { useState, useEffect } from 'react';
 import type { Document } from '../../domain/entities/Document';
+import type { Headquarter } from '../../domain/entities/Headquarter';
 import type { Process } from '../../domain/entities/Process';
 import type { ProcessType } from '../../domain/entities/ProcessType';
+import type { Servicio } from '../../domain/entities/Servicio';
 import { DocumentService } from '../../application/services/DocumentService';
 import { DocumentRepository } from '../../infrastructure/repositories/DocumentRepository';
+import { HeadquarterRepository } from '../../infrastructure/repositories/HeadquarterRepository';
 import { ProcessRepository } from '../../infrastructure/repositories/ProcessRepository';
 import { ProcessTypeRepository } from '../../infrastructure/repositories/ProcessTypeRepository';
+import { ServicioRepository } from '../../infrastructure/repositories/ServicioRepository';
 
 export const useDocumentCRUD = () => {
     const [documents, setDocuments] = useState<Document[]>([]);
     const [processes, setProcesses] = useState<Process[]>([]);
     const [processTypes, setProcessTypes] = useState<ProcessType[]>([]);
+    const [headquarters, setHeadquarters] = useState<Headquarter[]>([]);
+    const [servicios, setServicios] = useState<Servicio[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const documentService = new DocumentService(
         new DocumentRepository(),
         new ProcessRepository(),
-        new ProcessTypeRepository()
+        new ProcessTypeRepository(),
+        new HeadquarterRepository(),
+        new ServicioRepository()
     );
 
     const fetchDocuments = async () => {
@@ -52,6 +60,24 @@ export const useDocumentCRUD = () => {
         }
     };
 
+    const fetchHeadquarters = async () => {
+        try {
+            const headquartersData = await documentService.getHeadquarters();
+            setHeadquarters(headquartersData);
+        } catch (err: any) {
+            console.error("Error al cargar sedes:", err);
+        }
+    };
+
+    const fetchServicios = async () => {
+        try {
+            const serviciosData = await documentService.getServicios();
+            setServicios(serviciosData);
+        } catch (err: any) {
+            console.error("Error al cargar servicios:", err);
+        }
+    };
+
     const createDocument = async (data: FormData) => {
         const newDoc = await documentService.createDocument(data);
         setDocuments(prev => [...prev, newDoc]);
@@ -73,7 +99,13 @@ export const useDocumentCRUD = () => {
         const loadData = async () => {
             setLoading(true);
             try {
-                await Promise.all([fetchDocuments(), fetchProcesses(), fetchProcessTypes()]);
+                await Promise.all([
+                    fetchDocuments(),
+                    fetchProcesses(),
+                    fetchProcessTypes(),
+                    fetchHeadquarters(),
+                    fetchServicios()
+                ]);
             } catch (err) {
                 setError("Error al cargar los datos");
             } finally {
@@ -88,11 +120,15 @@ export const useDocumentCRUD = () => {
         documents,
         processes,
         processTypes,
+        headquarters,
+        servicios,
         loading,
         error,
         fetchDocuments,
         fetchProcesses,
         fetchProcessTypes,
+        fetchHeadquarters,
+        fetchServicios,
         createDocument,
         updateDocument,
         deleteDocument,

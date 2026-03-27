@@ -1,7 +1,9 @@
 import React from 'react';
 import { FaTimes, FaFileAlt } from 'react-icons/fa';
 import type { Document } from '../../../domain/entities/Document';
+import type { Headquarter } from '../../../domain/entities/Headquarter';
 import type { Process } from '../../../domain/entities/Process';
+import type { Servicio } from '../../../domain/entities/Servicio';
 import type { DocumentPermissions } from '../../../application/services/PermissionService';
 import type { DocumentService } from '../../../application/services/DocumentService';
 import { Label } from '../Label';
@@ -10,6 +12,8 @@ import { TIPOS_DOCUMENTO, ESTADOS } from '../../../domain/types';
 interface ViewModalProps {
   document: Document;
   processes: Process[];
+  headquarters: Headquarter[];
+  servicios: Servicio[];
   permissions: DocumentPermissions;
   documentService: DocumentService;
   onClose: () => void;
@@ -18,6 +22,8 @@ interface ViewModalProps {
 export default function ViewModal({
   document,
   processes,
+  headquarters,
+  servicios,
   permissions,
   documentService,
   onClose
@@ -55,6 +61,14 @@ export default function ViewModal({
             <Label title="Descripción:" value={document.descripcion_documento} />
 
             <Label title="Proceso:" value={documentService.getProcessName(processes, document.proceso)} />
+            <Label
+              title="Sede:"
+              value={document.headquarter_nombre || documentService.getHeadquarterName(headquarters, document.headquarter)}
+            />
+            <Label
+              title="Servicio:"
+              value={document.servicio_nombre || documentService.getServicioName(servicios, document.servicio)}
+            />
             <Label title="Tipo:" value={getTipoLabel(document.tipo_documento)} />
 
             <Label
